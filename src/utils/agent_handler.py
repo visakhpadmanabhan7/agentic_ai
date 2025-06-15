@@ -1,20 +1,32 @@
-from langchain_ollama import OllamaLLM
 from crewai import Agent, Task, Crew
+from langchain_ollama import OllamaLLM
+from src.utils.calorie_tool import calorie_calculator
 
-def run_agent(prompt: str):
-    llm = OllamaLLM(model="ollama/mistral")
+llm = OllamaLLM(model="ollama/mistral",base_url="http://ollama:11434")
+
+
+def run_agent(prompt: str) -> str:
     agent = Agent(
         role="Nutritionist",
-        goal="Create a personalized plant-based meal plan",
-        backstory="A certified sports nutritionist for vegan athletes.",
+        goal="Create a personalized meal plan based on the provided user profile",
+        backstory="A certified  nutritionist trained in sports science and metabolic calculations.",
         llm=llm,
-        verbose=False,
+        tools=[calorie_calculator],
+        verbose=True,
     )
+
     task = Task(
         description=prompt,
-        expected_output="A detailed 7-day meal plan.",
-        agent=agent
+        expected_output="Return a complete 7-day meal plan with macros and calories per day.",
+        agent=agent,
     )
-    crew = Crew(agents=[agent], tasks=[task], verbose=False)
+
+    crew = Crew(
+        agents=[agent],
+        tasks=[task],
+        verbose=True,
+    )
+
+
     result = crew.kickoff()
-    return result.output if hasattr(result, "output") else str(result)
+    return str(result)

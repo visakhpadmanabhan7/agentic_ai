@@ -1,0 +1,15 @@
+# Core agent framework
+crewai
+
+# 🧩 LangChain core orchestration
+langchain
+
+#  Ollama integration for local LLMs (e.g., Mistral)
+langchain-ollama
+
+# 🔐 For config management (not yet used)
+python-dotenv
+
+yagmail
+
+fpdf
