@@ -21,7 +21,6 @@ services:
     volumes:
       - ollama_models:/root/.ollama
     restart: unless-stopped
-    entrypoint: ["sh", "-c", "ollama pull mistral && ollama serve"]
 
 volumes:
   ollama_models:
